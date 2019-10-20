@@ -1,12 +1,15 @@
 package pl.sda;
 
 import pl.sda.movies.model.Movie;
+import pl.sda.points.calculators.DefaultPointsCalculator;
 import pl.sda.points.PointsFacade;
 import pl.sda.points.storage.InMemoryPointsRepository;
+import pl.sda.pricing.calculators.DefaultPriceCalculator;
 import pl.sda.rentals.Rental;
 import pl.sda.pricing.PricingFacade;
 import pl.sda.rentals.MovieRentalFacade;
 import pl.sda.rentals.RentalSummary;
+import pl.sda.time.TimeRepository;
 import pl.sda.users.model.User;
 
 import java.time.LocalDate;
@@ -29,9 +32,9 @@ public class App {
 
     private static MovieRentalFacade initFacade() {
 
-        PricingFacade pricingFacade = new PricingFacade();
+        PricingFacade pricingFacade = new PricingFacade(new DefaultPriceCalculator(new TimeRepository()));
 
-        PointsFacade pointsFacade = new PointsFacade(new InMemoryPointsRepository());
+        PointsFacade pointsFacade = new PointsFacade(new InMemoryPointsRepository(), new DefaultPointsCalculator());
 
         return new MovieRentalFacade(pointsFacade, pricingFacade);
 
